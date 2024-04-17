@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 class Zero(Exception): pass
 class NegativeNumber(Exception): pass
 class NonFourDigitNumber(Exception): pass
+class NonEightDigitNumber(Exception): pass
 
 class PRNG_methods:
     def __init__(self):
@@ -14,7 +15,7 @@ class PRNG_methods:
     def middle_square_method(self, iters):
         X_list = []
         Y_list = []
-        a1 = int(input('Enter the number: '))
+        a1 = int(input('Enter the 4-digit number: '))
 
         if a1 == 0:
             raise Zero()
@@ -47,16 +48,15 @@ class PRNG_methods:
     def middle_multiplication_method(self, iters):
         X_list = []
         Y_list = []
-        a = int(input('Enter the first number: '))
-        b = int(input('Enter the second number: '))
+        a = int(input('Enter the first 4-digit number: '))
+        b = int(input('Enter the second 4-digit number: '))
 
-        if a or b == 0:
+        if a == 0 or b == 0:
             raise Zero()
-        elif a or b < 0:
+        elif a < 0 or b < 0:
             raise NegativeNumber()
-        elif len(str(a)) or len(str(a)) != 4:
-            raise NonFourDigitNumber
-
+        elif len(str(a)) != 4 or len(str(b)) != 4:
+            raise NonFourDigitNumber()
 
         for i in range (iters):
             c1 = a * b
@@ -77,10 +77,31 @@ class PRNG_methods:
                 break
         return X_list, Y_list
 
-    def linear_congruential_method(self):
+    def mixing_method(self, iters):
+        X_list = []
+        Y_list = []
+        a = int(input(f'Enter 8-digit number: '))
+
+        if a == 0:
+            raise Zero()
+        elif a < 0:
+            raise NegativeNumber()
+        elif len(str(a)) != 8:
+            raise NonEightDigitNumber()
+
+        str_a = str(a)
+
+        str_a_right = ''
+        str_a_right = str_a_right + str_a[6:] + str_a[0:6]
+
+        str_a_left = ''
+        str_a_left = str_a_left + str_a[2:] + str_a[0:2]
+
+        print(f'{str_a} -> {str_a_right} and {str_a_left}')
+
         return 0
 
-    def mixing_method(self):
+    def linear_congruential_method(self):
         return 0
 
 number_operation = ''
@@ -88,8 +109,8 @@ while(number_operation != '0'):
     number_operation = input(
         f'1) Middle square method\n'
         f'2) Middle multiplication method\n'
-        f'3) Linear congruential method\n'
-        f'4) Mixing method\n'
+        f'3) Mixing method\n'
+        f'4) Linear congruential method\n'
         f'0) Quit\n'
         f'Choose the operation: ')
     N = 50
@@ -110,7 +131,7 @@ while(number_operation != '0'):
         except NegativeNumber:
             print(f'Wrong number: Negative number!\n')
         except NonFourDigitNumber:
-            print(f'Wrong number: Not a four-digit number!\n')
+            print(f'Wrong number: Not a 4-digit number!\n')
 
 
     elif(number_operation == '2'):
@@ -118,10 +139,41 @@ while(number_operation != '0'):
         X_list = []
         Y_list = []
 
+        try:
+            X_list, Y_list = method.middle_multiplication_method(N)
+
+            print(X_list)
+            print(Y_list)
+
+            plt.scatter(X_list, Y_list, s=10, c='#007dff')
+            plt.show()
+
+        except Zero:
+            print(f'Wrong number: Zero!\n')
+        except NegativeNumber:
+            print(f'Wrong number: Negative number!\n')
+        except NonFourDigitNumber:
+            print(f'Wrong number: Not a 4-digit number!\n')
+
     elif(number_operation == '3'):
         method = PRNG_methods()
         X_list = []
         Y_list = []
+        try:
+            method.mixing_method(N)
+
+            # print(X_list)
+            # print(Y_list)
+            #
+            # plt.scatter(X_list, Y_list, s=10, c='#007dff')
+            # plt.show()
+
+        except Zero:
+            print(f'Wrong number: Zero!\n')
+        except NegativeNumber:
+            print(f'Wrong number: Negative number!\n')
+        except NonEightDigitNumber:
+            print(f'Wrong number: Not a 8-digit number!\n')
 
     elif(number_operation == '4'):
         method = PRNG_methods()
