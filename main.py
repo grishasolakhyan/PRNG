@@ -5,22 +5,53 @@ class PRNG_methods:
     def __init__(self):
         pass
 
-    def middle_square_method(self, x):
-        str_x = str(x)
-        x = int(str_x)
-        x2 = x**2
-        str_x2 = str(x2)
+    def middle_square_method(self, iters):
+        X_list = []
+        Y_list = []
+        a1 = int(input('Enter the number: '))
+        for i in range(iters):
+            str_a1 = str(a1)
+            a1 = int(str_a1)
+            a2 = a1**2
+            str_a2 = str(a2)
 
-        if len(str_x2) < 8:
-            str_x2 = (8 - len(str_x2)) * '0' + str_x2
-        print(str_x2)
-        str_x2 = str_x2[2:6]
-        print(f'{x} -> {x2} -> {str_x2}')
-        x2 = int(str_x2)
-        return x2
+            if len(str_a2) < 8:
+                str_a2 = (8 - len(str_a2)) * '0' + str_a2
+            print(str_a2)
+            str_a2 = str_a2[2:6]
+            print(f'{a1} -> {a2} -> {str_a2}')
+            a2 = int(str_a2)
+            Y_list.append(a2 / 10000)
+            X_list.append(i + 1)
+            a1 = a2
+            if a1 == 0:
+                print(f'GENERATION HAS REACHED ZERO!')
+                break
+        return X_list, Y_list
 
-    def middle_multiplication_method(self):
-        return 0
+    def middle_multiplication_method(self, iters):
+        X_list = []
+        Y_list = []
+        a = int(input('Enter the first number: '))
+        b = int(input('Enter the second number: '))
+        for i in range (iters):
+            c = a * b
+            str_c1 = str(c)
+
+            if len(str_c1) < 8:
+                str_c1 = (8 - len(str_c1)) * '0' + str_c1
+
+            str_c2 = str_c1[2:6]
+            c2 = int(str_c2)
+            print(f'{a} x {b} = {c}')
+            a = b
+            b = c2
+            X_list.append(i+1)
+            Y_list.append(c2/10000)
+            if c2 == 0:
+                print(f'GENERATION HAS REACHED ZERO!')
+                break
+        return X_list, Y_list
 
     def linear_congruential_method(self):
         return 0
@@ -28,22 +59,12 @@ class PRNG_methods:
     def mixing_method(self):
         return 0
 
-msm_list = []
-msm_ind = []
 method = PRNG_methods()
-num = int(input('Enter the number: '))
+#X_list, Y_list = method.middle_square_method(50)
+X_list, Y_list = method.middle_multiplication_method(500)
 
-for i in range(100):
-    res = method.middle_square_method(num)
-    msm_list.append(res/10000)
-    msm_ind.append(i+1)
-    num = res
-    if num == 0:
-        print(f'GENERATION HAS REACHED ZERO!')
-        break
+print(X_list)
+print(Y_list)
 
-print(msm_ind)
-print(msm_list)
-
-plt.scatter(msm_ind, msm_list, s=10, c='#007dff')
+plt.scatter(X_list, Y_list, s=10, c='#007dff')
 plt.show()
