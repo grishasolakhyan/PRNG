@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 class Zero(Exception): pass
 class NegativeNumber(Exception): pass
@@ -88,21 +89,63 @@ class PRNG_methods:
             raise NegativeNumber()
         elif len(str(a)) != 8:
             raise NonEightDigitNumber()
+        for i in range(iters):
+            str_a = str(a)
 
-        str_a = str(a)
+            str_a_right = ''
+            str_a_right = str_a_right + str_a[6:] + str_a[0:6]
 
-        str_a_right = ''
-        str_a_right = str_a_right + str_a[6:] + str_a[0:6]
+            str_a_left = ''
+            str_a_left = str_a_left + str_a[2:] + str_a[0:2]
 
-        str_a_left = ''
-        str_a_left = str_a_left + str_a[2:] + str_a[0:2]
+            a_right = int(str_a_right)
+            a_left = int(str_a_left)
 
-        print(f'{str_a} -> {str_a_right} and {str_a_left}')
+            c = a_right + a_left
+            str_c = str(c)
+            str_c2 = ''
+            if (len(str_c) > 8):
+                str_c2 = str_c[1:]
+            else:
+                str_c2 = str_c
+            # print(f'{str_a} -> {str_a_right} + {str_a_left} = {str_c} -> {str_c2}')
+            a = int(str_c2)
+            X_list.append(i + 1)
+            Y_list.append(a / 10**8)
+            if a == 0:
+                print(f'GENERATION HAS REACHED ZERO!')
+                break
 
-        return 0
+        return X_list, Y_list
 
-    def linear_congruential_method(self):
-        return 0
+    def linear_congruential_method(self, iters):
+        m = 2 ** 32
+        a = 268435461
+        b = 907612489
+        X0 = int(input(f'Enter the number: '))
+        for i in range(iters):
+            X1 = math.ceil(math.fmod((a * math.ceil(X0) + b), m))
+            X0 = X1
+
+            X_list.append(i + 1)
+            Y_list.append(X0 * 2.3 / 10 ** 10)
+
+        return X_list, Y_list
+
+    # m = 2 ** 32
+    # a = 268435461
+    # b = 907612489
+
+    # def Line_cong(seed, N):
+    #     if N == 1:
+    #         return math.ceil(math.fmod(a * math.ceil(seed) + b, m))
+    #     r = [0 for i in range(N)]
+    #     r[0] = math.ceil(seed)
+    #     for i in range(1, N):
+    #         r[i] = math.ceil(math.fmod((a * r[i - 1] + b), m))
+    #     for i in range(0, N):
+    #         r[i] = r[i] * 2.3 / 10 ** 10
+    #     return r[0:N]
 
 number_operation = ''
 while(number_operation != '0'):
@@ -160,13 +203,13 @@ while(number_operation != '0'):
         X_list = []
         Y_list = []
         try:
-            method.mixing_method(N)
+            X_list, Y_list = method.mixing_method(N)
 
-            # print(X_list)
-            # print(Y_list)
-            #
-            # plt.scatter(X_list, Y_list, s=10, c='#007dff')
-            # plt.show()
+            print(X_list)
+            print(Y_list)
+
+            plt.scatter(X_list, Y_list, s=10, c='#007dff')
+            plt.show()
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -179,6 +222,14 @@ while(number_operation != '0'):
         method = PRNG_methods()
         X_list = []
         Y_list = []
+
+        X_list, Y_list = method.linear_congruential_method(N)
+
+        print(X_list)
+        print(Y_list)
+
+        plt.scatter(X_list, Y_list, s=10, c='#007dff')
+        plt.show()
 
     elif(number_operation == '0'):
         quit()
