@@ -132,21 +132,6 @@ class PRNG_methods:
 
         return X_list, Y_list
 
-    # m = 2 ** 32
-    # a = 268435461
-    # b = 907612489
-
-    # def Line_cong(seed, N):
-    #     if N == 1:
-    #         return math.ceil(math.fmod(a * math.ceil(seed) + b, m))
-    #     r = [0 for i in range(N)]
-    #     r[0] = math.ceil(seed)
-    #     for i in range(1, N):
-    #         r[i] = math.ceil(math.fmod((a * r[i - 1] + b), m))
-    #     for i in range(0, N):
-    #         r[i] = r[i] * 2.3 / 10 ** 10
-    #     return r[0:N]
-
 number_operation = ''
 while(number_operation != '0'):
     number_operation = input(
