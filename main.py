@@ -1,6 +1,8 @@
 import numpy as np
+import random
 import math
 import matplotlib.pyplot as plt
+import pylab
 class Zero(Exception): pass
 class NegativeNumber(Exception): pass
 class NonFourDigitNumber(Exception): pass
@@ -8,9 +10,6 @@ class NonEightDigitNumber(Exception): pass
 
 N = 2000
 n = int(N/2)
-rand = []
-rand1 = []
-rand2 = []
 
 class PRNG_methods:
     def __init__(self):
@@ -37,6 +36,7 @@ class PRNG_methods:
         main_list = []
         X_list = []
         Y_list = []
+
         a1 = int(input('Enter the 4-digit number: '))
 
         if a1 == 0:
@@ -45,7 +45,6 @@ class PRNG_methods:
             raise NegativeNumber()
         elif len(str(a1)) != 4:
             raise NonFourDigitNumber
-
 
         for i in range(iters):
             str_a1 = str(a1)
@@ -81,6 +80,7 @@ class PRNG_methods:
         main_list = []
         X_list = []
         Y_list = []
+
         a = int(input('Enter the first 4-digit number: '))
         b = int(input('Enter the second 4-digit number: '))
 
@@ -155,7 +155,6 @@ class PRNG_methods:
                 str_c2 = str_c[1:]
             else:
                 str_c2 = str_c
-            # print(f'{str_a} -> {str_a_right} + {str_a_left} = {str_c} -> {str_c2}')
             a = int(str_c2)
 
             main_list.append(a / 10**8)
@@ -202,6 +201,22 @@ class Graph:
 
         return 0
 
+def randomize(iters):
+    rand = []
+    rand1 = []
+    rand2 = []
+
+    for i in range(iters):
+        rand.append(random.randint(0, 9999))
+        rand[i] = rand[i] / 10000
+    print(rand)
+    print('\n')
+    for i in range(n):
+        rand1.append(rand[i])
+        rand2.append(rand[iters - i - 1])
+
+    return rand1, rand2
+
 number_operation = ''
 while(number_operation != '0'):
     number_operation = input(
@@ -216,12 +231,14 @@ while(number_operation != '0'):
         method = PRNG_methods()
         try:
             X_list, Y_list = method.middle_square_method(N)
+            rand1, rand2 = randomize(N)
 
             print(f'{X_list}')
             print(f'{Y_list}\n')
 
             plot_graph = Graph()
-            plot_graph.scatter(X_list, Y_list)
+            graph1 = plot_graph.scatter(X_list, Y_list)
+
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -257,12 +274,14 @@ while(number_operation != '0'):
         Y_list = []
         try:
             X_list, Y_list = method.mixing_method(N)
+            rand1, rand2 = randomize(N)
 
             print(f'{X_list}')
             print(f'{Y_list}\n')
 
             plot_graph = Graph()
             plot_graph.scatter(X_list, Y_list)
+            plot_graph.scatter(rand1, rand2)
 
         except Zero:
             print(f'Wrong number: Zero!\n')
