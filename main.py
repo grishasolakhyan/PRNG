@@ -79,6 +79,7 @@ class PRNG_methods:
         return X_list, Y_list
 
     def middle_multiplication_method(self, iters):
+        main_list = []
         X_list = []
         Y_list = []
         a = int(input('Enter the first 4-digit number: '))
@@ -103,13 +104,12 @@ class PRNG_methods:
             str_c_0 = self.fix_zero(str_c2)
             c2 = int(str_c_0)
 
-            c2 = self.fix_loop(Y_list, c2)
+            c2 = self.fix_loop(main_list, c2)
             print(f'{str_c2} -> {str_c_0}')
 
             print(f'{a} x {b} = {c1}')
 
-            X_list.append(i + 1)
-            Y_list.append(c2 / 10000)
+            main_list.append(c2 / 10000)
 
             a = b
             b = c2
@@ -117,6 +117,12 @@ class PRNG_methods:
             if c2 == 0:
                 print(f'GENERATION HAS REACHED ZERO!')
                 break
+
+        for i in range(n):
+            print(i)
+            X_list.append(main_list[i])
+            Y_list.append(main_list[N - i - 1])
+
         return X_list, Y_list
 
     def mixing_method(self, iters):
