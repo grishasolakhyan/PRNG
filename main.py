@@ -6,12 +6,28 @@ class NegativeNumber(Exception): pass
 class NonFourDigitNumber(Exception): pass
 class NonEightDigitNumber(Exception): pass
 
+N = 1000
+
 class PRNG_methods:
     def __init__(self):
         pass
 
-    def checking(self, check_value):
-        return 0
+    def fix_loop(self, Y_list, check_value):
+        check = True
+        while (check == True):
+            val = check_value / 10000
+            if (val in Y_list):
+                check_value += 1
+            elif (val not in Y_list):
+                check = False
+        return check_value
+
+    def fix_zero(self, check_value):
+        num_zeros = check_value.count('0')
+        if num_zeros > 2:
+            check_value = check_value.replace("0", "1")
+        return check_value
+
 
     def middle_square_method(self, iters):
         X_list = []
@@ -36,11 +52,17 @@ class PRNG_methods:
                 str_a2 = (8 - len(str_a2)) * '0' + str_a2
             print(str_a2)
             str_a2 = str_a2[2:6]
-            print(f'{a1} -> {a2} -> {str_a2}')
-            a2 = int(str_a2)
+
+            str_a_0 = self.fix_zero(str_a2)
+            a2 = int(str_a_0)
+
+            a2 = self.fix_loop(Y_list, a2)
+            print(f'{str_a2} -> {str_a_0}')
+
             Y_list.append(a2 / 10000)
             X_list.append(i + 1)
             a1 = a2
+
             if a1 == 0:
                 print(f'GENERATION HAS REACHED ZERO!')
                 break
@@ -67,12 +89,21 @@ class PRNG_methods:
                 str_c1 = (8 - len(str_c1)) * '0' + str_c1
 
             str_c2 = str_c1[2:6]
-            c2 = int(str_c2)
+
+            str_c_0 = self.fix_zero(str_c2)
+            c2 = int(str_c_0)
+
+            c2 = self.fix_loop(Y_list, c2)
+            print(f'{str_c2} -> {str_c_0}')
+
             print(f'{a} x {b} = {c1}')
+
+            X_list.append(i + 1)
+            Y_list.append(c2 / 10000)
+
             a = b
             b = c2
-            X_list.append(i+1)
-            Y_list.append(c2/10000)
+
             if c2 == 0:
                 print(f'GENERATION HAS REACHED ZERO!')
                 break
@@ -132,6 +163,17 @@ class PRNG_methods:
 
         return X_list, Y_list
 
+class Graph:
+    def __init__(self):
+        pass
+
+    def scatter(self, x, y):
+
+        plt.scatter(x, y, s=8, c='#007dff')
+        plt.show()
+
+        return 0
+
 number_operation = ''
 while(number_operation != '0'):
     number_operation = input(
@@ -139,20 +181,19 @@ while(number_operation != '0'):
         f'2) Middle multiplication method\n'
         f'3) Mixing method\n'
         f'4) Linear congruential method\n'
-        f'0) Quit\n'
+        f'0) Quit\n\n'
         f'Choose the operation: ')
-    N = 50
 
     if(number_operation == '1'):
         method = PRNG_methods()
         try:
             X_list, Y_list = method.middle_square_method(N)
 
-            print(X_list)
-            print(Y_list)
+            print(f'{X_list}')
+            print(f'{Y_list}\n')
 
-            plt.scatter(X_list, Y_list, s=10, c='#007dff')
-            plt.show()
+            plot_graph = Graph()
+            plot_graph.scatter(X_list, Y_list)
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -160,7 +201,6 @@ while(number_operation != '0'):
             print(f'Wrong number: Negative number!\n')
         except NonFourDigitNumber:
             print(f'Wrong number: Not a 4-digit number!\n')
-
 
     elif(number_operation == '2'):
         method = PRNG_methods()
@@ -170,11 +210,11 @@ while(number_operation != '0'):
         try:
             X_list, Y_list = method.middle_multiplication_method(N)
 
-            print(X_list)
-            print(Y_list)
+            print(f'{X_list}')
+            print(f'{Y_list}\n')
 
-            plt.scatter(X_list, Y_list, s=10, c='#007dff')
-            plt.show()
+            plot_graph = Graph()
+            plot_graph.scatter(X_list, Y_list)
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -190,11 +230,11 @@ while(number_operation != '0'):
         try:
             X_list, Y_list = method.mixing_method(N)
 
-            print(X_list)
-            print(Y_list)
+            print(f'{X_list}')
+            print(f'{Y_list}\n')
 
-            plt.scatter(X_list, Y_list, s=10, c='#007dff')
-            plt.show()
+            plot_graph = Graph()
+            plot_graph.scatter(X_list, Y_list)
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -210,11 +250,11 @@ while(number_operation != '0'):
 
         X_list, Y_list = method.linear_congruential_method(N)
 
-        print(X_list)
-        print(Y_list)
+        print(f'{X_list}')
+        print(f'{Y_list}\n')
 
-        plt.scatter(X_list, Y_list, s=10, c='#007dff')
-        plt.show()
+        plot_graph = Graph()
+        plot_graph.scatter(X_list, Y_list)
 
     elif(number_operation == '0'):
         quit()
