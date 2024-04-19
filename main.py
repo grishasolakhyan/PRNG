@@ -72,7 +72,6 @@ class PRNG_methods:
                 break
 
         for i in range(n):
-            print(i)
             X_list.append(main_list[i])
             Y_list.append(main_list[N - i - 1])
 
@@ -119,15 +118,16 @@ class PRNG_methods:
                 break
 
         for i in range(n):
-            print(i)
             X_list.append(main_list[i])
             Y_list.append(main_list[N - i - 1])
 
         return X_list, Y_list
 
     def mixing_method(self, iters):
+        main_list = []
         X_list = []
         Y_list = []
+
         a = int(input(f'Enter 8-digit number: '))
 
         if a == 0:
@@ -157,15 +157,24 @@ class PRNG_methods:
                 str_c2 = str_c
             # print(f'{str_a} -> {str_a_right} + {str_a_left} = {str_c} -> {str_c2}')
             a = int(str_c2)
-            X_list.append(i + 1)
-            Y_list.append(a / 10**8)
+
+            main_list.append(a / 10**8)
+
             if a == 0:
                 print(f'GENERATION HAS REACHED ZERO!')
                 break
 
+        for i in range(n):
+            X_list.append(main_list[i])
+            Y_list.append(main_list[N - i - 1])
+
         return X_list, Y_list
 
     def linear_congruential_method(self, iters):
+        main_list = []
+        X_list = []
+        Y_list = []
+
         m = 2 ** 32
         a = 268435461
         b = 907612489
@@ -174,8 +183,11 @@ class PRNG_methods:
             X1 = math.ceil(math.fmod((a * math.ceil(X0) + b), m))
             X0 = X1
 
-            X_list.append(i + 1)
-            Y_list.append(X0 * 2.3 / 10 ** 10)
+            main_list.append(X0 * 2.3 / 10 ** 10)
+
+        for i in range(n):
+            X_list.append(main_list[i])
+            Y_list.append(main_list[N - i - 1])
 
         return X_list, Y_list
 
