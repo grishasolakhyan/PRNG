@@ -6,7 +6,11 @@ class NegativeNumber(Exception): pass
 class NonFourDigitNumber(Exception): pass
 class NonEightDigitNumber(Exception): pass
 
-N = 1000
+N = 2000
+n = int(N/2)
+rand = []
+rand1 = []
+rand2 = []
 
 class PRNG_methods:
     def __init__(self):
@@ -30,6 +34,7 @@ class PRNG_methods:
 
 
     def middle_square_method(self, iters):
+        main_list = []
         X_list = []
         Y_list = []
         a1 = int(input('Enter the 4-digit number: '))
@@ -56,16 +61,21 @@ class PRNG_methods:
             str_a_0 = self.fix_zero(str_a2)
             a2 = int(str_a_0)
 
-            a2 = self.fix_loop(Y_list, a2)
+            a2 = self.fix_loop(main_list, a2)
             print(f'{str_a2} -> {str_a_0}')
 
-            Y_list.append(a2 / 10000)
-            X_list.append(i + 1)
+            main_list.append(a2 / 10000)
             a1 = a2
 
             if a1 == 0:
                 print(f'GENERATION HAS REACHED ZERO!')
                 break
+
+        for i in range(n):
+            print(i)
+            X_list.append(main_list[i])
+            Y_list.append(main_list[N - i - 1])
+
         return X_list, Y_list
 
     def middle_multiplication_method(self, iters):
