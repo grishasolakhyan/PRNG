@@ -184,7 +184,7 @@ class PRNG_methods:
         return main_list, X_list, Y_list
 
 def frequency_analysis_method(arr, n):
-    steps = int(input(f'Enter the number of steps: '))
+    steps = int(input(f'Enter the number of splits: '))
 
     if steps == 0:
         raise Zero()
@@ -239,25 +239,30 @@ class Graph:
     def __init__(self):
         pass
 
-    def scatter(self, title, x, y, rand1, rand2, freq_arr, ind, corr_arr, ind2):
+    def scatter(self, title, x, y, rand1, rand2, freq_arr, ind, corr_arr, ind2, M, D):
         str_N = str(N)
+        str_M = str(M)
+        str_D = str(D)
+
         figure, axis = plt.subplots(2, 2)
 
-        axis[0, 0].scatter(x, y, s=8, c='#007dff')
-        axis[0, 0].set_title(title + ' at N=' + str_N)
+        axis[0, 0].scatter(x, y, s=8, c='#2c75ff')
+        axis[0, 0].set_title(title + ' at N=' + str_N + '\nM=' + str_M + '\nD=' + str_D)
         axis[0, 0].set_xlabel('r')
         axis[0, 0].set_ylabel('r=f(y)')
+        axis[0, 0].text(5, 10, 'Hello!', fontsize = 10)
 
-        axis[0, 1].scatter(rand1, rand2, s=8, c='red')
+        axis[0, 1].scatter(rand1, rand2, s=8, c='#e52b50')
         axis[0, 1].set_title('rand()' + ' at N=' + str_N)
         axis[0, 1].set_xlabel('r')
         axis[0, 1].set_ylabel('r=f(y)')
 
-        axis[1, 0].plot(ind, freq_arr, c='blue')
+        axis[1, 0].plot(ind, freq_arr, c='#660099')
+        axis[1, 0].scatter(ind, freq_arr, c='#660099', s=5)
         axis[1, 0].set_title('Frequency analysis' + ' at N=' + str_N)
         axis[1, 0].set_ylabel('fi, %')
 
-        axis[1, 1].plot(ind2, corr_arr, c='orange')
+        axis[1, 1].plot(ind2, corr_arr, c='#ff4500')
         axis[1, 1].set_title("Correlation" + ' at N=' + str_N)
 
         plt.show()
@@ -299,7 +304,7 @@ while(number_operation != '0'):
             title = 'Middle square method'
 
             plot_graph = Graph()
-            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2)
+            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2, M, D)
             print(f'{M} and {D}')
 
         except Zero:
