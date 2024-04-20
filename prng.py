@@ -2,7 +2,7 @@ import numpy as np
 import random
 import math
 import matplotlib.pyplot as plt
-import pylab
+
 class Zero(Exception): pass
 class NegativeNumber(Exception): pass
 class NonFourDigitNumber(Exception): pass
@@ -182,58 +182,60 @@ class PRNG_methods:
             Y_list.append(main_list[N - i - 1])
 
         return main_list, X_list, Y_list
+class Math_methods:
+    def __init__(self):
+        pass
 
-def frequency_analysis_method(arr, n):
-    steps = int(input(f'Enter the number of splits: '))
+    def frequency_analysis_method(self, arr, n):
+        steps = int(input(f'Enter the number of splits: '))
 
-    if steps == 0:
-        raise Zero()
-    elif steps < 0:
-        raise NegativeNumber()
+        if steps == 0:
+            raise Zero()
+        elif steps < 0:
+            raise NegativeNumber()
 
-    st = 1 / steps
-    s_t0 = -st
-    s_t1 = 0
+        st = 1 / steps
+        s_t0 = -st
+        s_t1 = 0
 
-    freq_arr = []
-    ind = []
+        freq_arr = []
+        ind = []
 
-    for i in range(steps):
-        s_t0 = s_t0 + st
-        s_t1 = s_t1 + st
-        k = 0
-        for j in range(len(arr)):
-            if (s_t0 < arr[j] <= s_t1):
-                k = k + 1
-        freq_arr.append(k)
+        for i in range(steps):
+            s_t0 = s_t0 + st
+            s_t1 = s_t1 + st
+            k = 0
+            for j in range(len(arr)):
+                if (s_t0 < arr[j] <= s_t1):
+                    k = k + 1
+            freq_arr.append(k)
 
-    for i in range(len(freq_arr)):
-        freq_arr[i] = (freq_arr[i] / n) * 100
-        ind.append(i + 1)
+        for i in range(len(freq_arr)):
+            freq_arr[i] = (freq_arr[i] / n) * 100
+            ind.append(i + 1)
 
-    return freq_arr, ind
+        return freq_arr, ind
 
-def correlation(main_list):
-    ind2=[]
-    R=[]
-    for i in range(1,n):
-        ter=[]
-        for j in range(i):
-            ter.append(main_list[j]*main_list[j+1])
-        R.append((sum(ter)/i)*12-3)
-        ind2.append(i)
-    return R, ind2
+    def correlation(self, main_list):
+        ind2=[]
+        R=[]
+        for i in range(1,n):
+            ter=[]
+            for j in range(i):
+                ter.append(main_list[j]*main_list[j+1])
+            R.append((sum(ter)/i)*12-3)
+            ind2.append(i)
+        return R, ind2
 
+    def expected_value_and_variance(self, final_array):
+        sum_m = 0
+        M = sum(final_array) / N  # expected value
 
-def expected_value_and_variance(final_array):
-    sum_m = 0
-    M = sum(final_array) / N  # expected value
-
-    mid_final_array = np.mean(final_array)
-    for i in range(len(final_array)):
-        sum_m = sum_m + (mid_final_array - final_array[i]) ** 2
-    D = sum_m / N  # variance
-    return M, D
+        mid_final_array = np.mean(final_array)
+        for i in range(len(final_array)):
+            sum_m = sum_m + (mid_final_array - final_array[i]) ** 2
+        D = sum_m / N  # variance
+        return M, D
 
 class Graph:
     def __init__(self):
@@ -247,23 +249,23 @@ class Graph:
         figure, axis = plt.subplots(2, 2)
 
         axis[0, 0].scatter(x, y, s=8, c='#2c75ff')
-        axis[0, 0].set_title(title + ' at N=' + str_N + '\nM=' + str_M + '\nD=' + str_D)
+        axis[0, 0].set_title(title + ' at N={0}'.format(n) + '\nM=' + str_M + '\nD=' + str_D)
         axis[0, 0].set_xlabel('r')
         axis[0, 0].set_ylabel('r=f(y)')
         axis[0, 0].text(5, 10, 'Hello!', fontsize = 10)
 
         axis[0, 1].scatter(rand1, rand2, s=8, c='#e52b50')
-        axis[0, 1].set_title('rand()' + ' at N=' + str_N)
+        axis[0, 1].set_title('rand()' + ' at N={0}'.format(n))
         axis[0, 1].set_xlabel('r')
         axis[0, 1].set_ylabel('r=f(y)')
 
         axis[1, 0].plot(ind, freq_arr, c='#660099')
         axis[1, 0].scatter(ind, freq_arr, c='#660099', s=5)
-        axis[1, 0].set_title('Frequency analysis' + ' at N=' + str_N)
+        axis[1, 0].set_title('Frequency analysis' + ' at N={0}'.format(n))
         axis[1, 0].set_ylabel('fi, %')
 
         axis[1, 1].plot(ind2, corr_arr, c='#ff4500')
-        axis[1, 1].set_title("Correlation" + ' at N=' + str_N)
+        axis[1, 1].set_title("Correlation" + ' at N={0}'.format(n))
 
         plt.show()
 
@@ -294,18 +296,19 @@ while(number_operation != '0'):
         f'Choose the operation: ')
 
     if(number_operation == '1'):
-        method = PRNG_methods()
+        prng_method = PRNG_methods()
+        math_method = Math_methods()
         try:
-            main_list, X_list, Y_list = method.middle_square_method(N)
+            main_list, X_list, Y_list = prng_method.middle_square_method(N)
             rand1, rand2 = randomize(N)
-            frequency_array, ind = frequency_analysis_method(X_list, n)
-            correlation_array, ind2 = correlation(main_list)
-            M, D = expected_value_and_variance(main_list)
+            frequency_array, ind = math_method.frequency_analysis_method(X_list, n)
+            correlation_array, ind2 = math_method.correlation(main_list)
+            M, D = math_method.expected_value_and_variance(main_list)
             title = 'Middle square method'
 
             plot_graph = Graph()
             plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2, M, D)
-            print(f'{M} and {D}')
+            print('\n')
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -315,19 +318,20 @@ while(number_operation != '0'):
             print(f'Wrong number: Not a 4-digit number!\n')
 
     elif(number_operation == '2'):
-        method = PRNG_methods()
-        X_list = []
-        Y_list = []
+        prng_method = PRNG_methods()
+        math_method = Math_methods()
 
         try:
-            main_list, X_list, Y_list = method.middle_multiplication_method(N)
+            main_list, X_list, Y_list = prng_method.middle_multiplication_method(N)
             rand1, rand2 = randomize(N)
-            frequency_array, ind = frequency_analysis_method(X_list, n)
-            correlation_array, ind2 = correlation(main_list)
+            frequency_array, ind = math_method.frequency_analysis_method(X_list, n)
+            correlation_array, ind2 = math_method.correlation(main_list)
+            M, D = math_method.expected_value_and_variance(main_list)
             title = 'Middle multiplication method'
 
             plot_graph = Graph()
-            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2)
+            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2, M, D)
+            print('\n')
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -337,18 +341,20 @@ while(number_operation != '0'):
             print(f'Wrong number: Not a 4-digit number!\n')
 
     elif(number_operation == '3'):
-        method = PRNG_methods()
-        X_list = []
-        Y_list = []
+        prng_method = PRNG_methods()
+        math_method = Math_methods()
+
         try:
-            main_list, X_list, Y_list = method.mixing_method(N)
+            main_list, X_list, Y_list = prng_method.mixing_method(N)
             rand1, rand2 = randomize(N)
-            frequency_array, ind = frequency_analysis_method(X_list, n)
-            correlation_array, ind2 = correlation(main_list)
+            frequency_array, ind = math_method.frequency_analysis_method(X_list, n)
+            correlation_array, ind2 = math_method.correlation(main_list)
+            M, D = math_method.expected_value_and_variance(main_list)
             title = 'Mixing method'
 
             plot_graph = Graph()
-            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2)
+            plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2, M, D)
+            print('\n')
 
         except Zero:
             print(f'Wrong number: Zero!\n')
@@ -358,16 +364,19 @@ while(number_operation != '0'):
             print(f'Wrong number: Not a 8-digit number!\n')
 
     elif(number_operation == '4'):
-        method = PRNG_methods()
+        prng_method = PRNG_methods()
+        math_method = Math_methods()
 
-        main_list, X_list, Y_list = method.linear_congruential_method(N)
+        main_list, X_list, Y_list = prng_method.linear_congruential_method(N)
         rand1, rand2 = randomize(N)
-        frequency_array, ind = frequency_analysis_method(X_list, n)
-        correlation_array, ind2 = correlation(main_list)
+        frequency_array, ind = math_method.frequency_analysis_method(X_list, n)
+        correlation_array, ind2 = math_method.correlation(main_list)
+        M, D = math_method.expected_value_and_variance(main_list)
         title = 'Linear congruential method'
 
         plot_graph = Graph()
-        plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2)
+        plot_graph.scatter(title, X_list, Y_list, rand1, rand2, frequency_array, ind, correlation_array, ind2, M, D)
+        print('\n')
 
     elif(number_operation == '0'):
         quit()
